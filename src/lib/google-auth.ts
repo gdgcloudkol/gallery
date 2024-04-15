@@ -9,11 +9,11 @@ function getNewLoginUrl() {
 function getNewRefreshToken(code) {
   try {
     var data = {
-      client_id: config.client_id,
-      client_secret: config.client_secret,
+      client_id: process.env.CLIENT_ID,
+      client_secret: process.env.CLIENT_SECRET,
       code: code,
       grant_type: "authorization_code",
-      redirect_uri: config.redirect_uri[0],
+      redirect_uri: process.env.REDIRECT_URI,
     };
     const axiosConfig = {
       method: "post",
@@ -31,8 +31,8 @@ function getNewRefreshToken(code) {
 
 function getAccessToken(refreshToken){
     const params = {
-        client_id: config.client_id,
-        client_secret: config.client_secret,
+        client_id: process.env.CLIENT_ID,
+        client_secret: process.env.CLIENT_SECRET,
         refresh_token: refreshToken,
         grant_type: "refresh_token",
     };
