@@ -13,5 +13,5 @@ export const setSize = (srcUrl: string, width?: number, height?: number) => {
     const base = srcUrl.split("=")[0]
     const w = 'w' + width || 200
     const h = 'h' + height || 200
-    return `${base}=${w}-${h}-no`
+    return `${base}=${w}-${h}`
 }
