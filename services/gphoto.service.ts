@@ -1,12 +1,8 @@
-import React from 'react'
-import {  writeFileSync } from 'fs'
-
-
 export const getPhoto = async (galleryURL: string) => {
     let res: any = await fetch(galleryURL)
     res = await res.text()
-    
-    const pat = /https:\/\/lh3\.googleusercontent\.com\/pw\/AP1.*?-no/g;
+
+    const pat = /https:\/\/lh3\.googleusercontent\.com\/pw\/AP1.*?\"/g;
     const urls = res.match(pat)
 
     // console.log('data', urls)
