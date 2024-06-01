@@ -1,8 +1,24 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+import localFont from "next/font/local";
+import "./globals.css";
+import GoTop from "@/components/GoTop";
+import Header from "@/components/Header";
+import Script from "next/script";
+
+const googleSans = localFont({
+  src: [
+    {
+      path: "../public/assets/fonts/GoogleSans-Regular_0.ttf",
+      weight: "400",
+    },
+    {
+      path: "../public/assets/fonts/GoogleSans-Bold-v1.27.ttf",
+      weight: "700",
+    },
+  ],
+  variable: "--font-google",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,8 +31,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang='en'>
+      <body className={`${googleSans.className}`}>
+        <Header />
+        {children}
+        <GoTop />
+      </body>
     </html>
   );
 }
