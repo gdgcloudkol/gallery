@@ -1,72 +1,59 @@
 "use client";
-import { getPhoto, setSize } from "@/services/gphoto.service";
-import { Gallery } from "react-grid-gallery";
-import { calculateAspectRatio, minAspectRatioDimensions } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import Arrow from "@/components/Icons/Arrow";
+import Card from "@/components/Card";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 
-export const GalleryWrapper = ({ id }: { id: string }) => {
-  const [images, setImages] = useState([]);
-  const [title, setTitle] = useState("");
-  useEffect(() => {
-    getData();
-    return () => {};
-  }, []);
-  const getData = async () => {
-    const response = await fetch(`/api/images`, {
-      method: "POST",
-      body: JSON.stringify(id),
-    });
-    const data = await response.json();
-    setTitle(data.title);
-    setImages(() =>
-      data?.images?.slice(0, 10)?.map((image: string) => ({
-        src: setSize(
-          image.substring(0, image.length - 1),
-          minAspectRatioDimensions[calculateAspectRatio(image)].width,
-          minAspectRatioDimensions[calculateAspectRatio(image)].height
-        ),
-        width: minAspectRatioDimensions[calculateAspectRatio(image)].width,
-        height: minAspectRatioDimensions[calculateAspectRatio(image)].height,
-      }))
-    );
+interface GalleryProps {
+  urls: string[];
+  id?: string;
+}
+
+const GalleryLocal: React.FC<GalleryProps> = ({ urls, id }) => {
+  const [visibleCount, setVisibleCount] = useState(10);
+  const router = useRouter();
+  const loadMore = () => {
+    setVisibleCount((prevCount) => Math.min(prevCount + 10, urls.length));
   };
 
   return (
-    <section className='w-full flex flex-col items-start justify-start space-y-4  '>
-      <h1 className='text-3xl md:text-4xl lg:text-6xl'> {title}</h1>
-      <div className='flex flex-wrap items-center justify-evenly gap-2'>
-        {images && images[0] ? (
-          // <Gallery urls={data?.images} />
-          <Gallery
-            images={[
-              {
-                src: "https://c2.staticflickr.com/9/8817/28973449265_07e3aa5d2e_b.jpg",
-                width: 320,
-                height: 174,
-                isSelected: true,
-                caption: "After Rain (Jeshu John - designerspics.com)",
-              },
-              {
-                src: "https://c2.staticflickr.com/9/8356/28897120681_3b2c0f43e0_b.jpg",
-                width: 320,
-                height: 212,
-                tags: [
-                  { value: "Ocean", title: "Ocean" },
-                  { value: "People", title: "People" },
-                ],
-                alt: "Boats (Jeshu John - designerspics.com)",
-              },
-              {
-                src: "https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_b.jpg",
-                width: 320,
-                height: 212,
-              },
-            ]}
-          />
-        ) : (
-          <>No images found</>
+    <div className='w-full '>
+      <div className='w-full flex items-center justify-between'>
+        <button
+          className='bg-transparent flex gap-2 text-foreground mb-4'
+          onClick={router.back}
+        >
+          <Arrow /> Go back
+        </button>
+        {id && (
+          <a
+            href={id}
+            target='_blank'
+            className='md:hidden  inline-flex text-blue-400 hover:underline'
+          >
+            Album
+          </a>
         )}
       </div>
-    </section>
+      <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2'>
+        {urls.slice(0, visibleCount).map((url, index) => (
+          <div key={index} className={``}>
+            <Card url={url} key={index} />
+          </div>
+        ))}
+      </div>
+      {visibleCount < urls.length && (
+        <div className='flex justify-center mt-4'>
+          <button
+            onClick={loadMore}
+            className='px-4 py-2 border border-blue-500 text-blue-500 bg-transparent rounded hover:bg-blue-600 hover:text-white duration-100'
+          >
+            Load more
+          </button>
+        </div>
+      )}
+    </div>
   );
 };
+
+export default GalleryLocal;

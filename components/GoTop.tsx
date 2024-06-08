@@ -34,7 +34,7 @@ const GoTop: React.FC = () => {
         onClick={scrollToTop}
       >
         <button className='block'>
-          <div className='grid  place-content-center z-50 fixed w-12 h-12 rounded-full right-4 bottom-4 cursor-pointer leading-7 text-center bg-secondary p-4 group-hover:bg-gray-700 duration-150'>
+          <div className='grid  place-content-center z-40 fixed w-12 h-12 rounded-full right-4 bottom-4 cursor-pointer leading-7 text-center bg-secondary p-4 group-hover:bg-gray-700 duration-150'>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               width='24'
